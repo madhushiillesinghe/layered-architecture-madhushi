@@ -17,12 +17,12 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
         stm.setBigDecimal(3, dto.getUnitPrice());
         stm.setInt(4, dto.getQty());
         boolean b=stm.executeUpdate() >0;
-        System.out.println(b);
+        //System.out.println(b);
         if (b) {
            return true;
         }
         connection.rollback();
-        DBConnection.getDbConnection().getConnection().setAutoCommit(false);
+        connection.setAutoCommit(true);
         return false;
 }
 }
