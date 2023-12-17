@@ -180,13 +180,16 @@ public class ManageCustomersFormController {
                 pstm.setString(2, name);
                 pstm.setString(3, address);
                 pstm.executeUpdate();*/
+                boolean isSaved = customerDao.saveCustomer(new CustomerDTO(id, name, address));
+                if (isSaved) {
+                    tblCustomers.getItems().add(new CustomerTM(id, name, address));
+                }
+            } catch(SQLException e){
+                       new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
+                   } catch(ClassNotFoundException e){
+                       e.printStackTrace();
+                   }
 
-                tblCustomers.getItems().add(new CustomerTM(id, name, address));
-            } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
 
 
         } else {
