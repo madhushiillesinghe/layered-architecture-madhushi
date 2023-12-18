@@ -83,7 +83,7 @@ public class ManageItemsFormController  {
          while (rst.next()) {
              tblItems.getItems().add(new ItemTM(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand")));
          }*/
-        ArrayList<ItemDTO> allCustomer = itemDao.getAllItem();
+        ArrayList<ItemDTO> allCustomer = itemDao.getAll();
 
         for (ItemDTO itemDTO : allCustomer) {
             tblItems.getItems().add(
@@ -147,7 +147,7 @@ public class ManageItemsFormController  {
             PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
             pstm.setString(1, code);
             pstm.executeUpdate();*/
-           boolean isDelete=itemDao.deleteItem(code);
+           boolean isDelete=itemDao.delete(code);
            if(isDelete) {
                tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
                tblItems.getSelectionModel().clearSelection();
@@ -195,7 +195,7 @@ public class ManageItemsFormController  {
                 pstm.setBigDecimal(3, unitPrice);
                 pstm.setInt(4, qtyOnHand);
                 pstm.executeUpdate();*/
-                boolean  isSaved=itemDao.saveItem(new ItemDTO(code,description,unitPrice,qtyOnHand));
+                boolean  isSaved=itemDao.save(new ItemDTO(code,description,unitPrice,qtyOnHand));
                 if(isSaved) {
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
                 }
@@ -219,7 +219,7 @@ public class ManageItemsFormController  {
                 pstm.setInt(3, qtyOnHand);
                 pstm.setString(4, code);
                 pstm.executeUpdate();*/
-               boolean isUpdate=itemDao.UpdateItem(new ItemDTO(code,description,unitPrice,qtyOnHand));
+               boolean isUpdate=itemDao.update(new ItemDTO(code,description,unitPrice,qtyOnHand));
                if(isUpdate) {
                    ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                    selectedItem.setDescription(description);
@@ -243,7 +243,7 @@ public class ManageItemsFormController  {
         PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
         pstm.setString(1, code);
         return pstm.executeQuery().next();*/
-         boolean isExist=itemDao.ExistItem(code);
+         boolean isExist=itemDao.exist(code);
          if(isExist){
              return true;
          }
@@ -255,7 +255,7 @@ public class ManageItemsFormController  {
         try {/*
             Connection connection = DBConnection.getDbConnection().getConnection();
             ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");*/
-            ResultSet rst=itemDao.genarateid();
+            ResultSet rst=itemDao.genarateId();
             if (rst.next()) {
                 String id = rst.getString("code");
                 int newItemId = Integer.parseInt(id.replace("I00-", "")) + 1;

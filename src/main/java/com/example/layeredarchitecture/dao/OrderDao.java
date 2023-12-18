@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderDao {
-     ResultSet generateNewOrderId() throws SQLException, ClassNotFoundException;
+     //ResultSet generateNewOrderId() throws SQLException, ClassNotFoundException;
      void selectOrderId(String orderId) throws SQLException, ClassNotFoundException;
-     boolean saveOrder(String orderId,LocalDate date,String customerId) throws SQLException, ClassNotFoundException;
+     //boolean saveOrder(String orderId,LocalDate date,String customerId) throws SQLException, ClassNotFoundException;
 }

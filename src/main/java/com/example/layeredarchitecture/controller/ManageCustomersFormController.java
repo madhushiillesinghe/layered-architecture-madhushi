@@ -94,7 +94,7 @@ public class ManageCustomersFormController {
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
 */
-            ArrayList<CustomerDTO> allCustomer = customerDao.getAllCustomer();
+            ArrayList<CustomerDTO> allCustomer = customerDao.getAll();
 
             for (CustomerDTO dto:allCustomer) {
                 tblCustomers.getItems().add(
@@ -180,7 +180,7 @@ public class ManageCustomersFormController {
                 pstm.setString(2, name);
                 pstm.setString(3, address);
                 pstm.executeUpdate();*/
-                boolean isSaved = customerDao.saveCustomer(new CustomerDTO(id, name, address));
+                boolean isSaved = customerDao.save(new CustomerDTO(id, name, address));
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
                 }
@@ -204,7 +204,7 @@ public class ManageCustomersFormController {
                 pstm.setString(2, address);
                 pstm.setString(3, id);
                 pstm.executeUpdate();*/
-                boolean isUpdate=customerDao.updateCustomer(new CustomerDTO(id,name,address));
+                boolean isUpdate=customerDao.update(new CustomerDTO(id,name,address));
                 if(isUpdate){tblCustomers.getItems().add(new CustomerTM(id,name,address));
                 }
             } catch (SQLException e) {
@@ -228,7 +228,7 @@ public class ManageCustomersFormController {
         PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
         pstm.setString(1, id);
         return pstm.executeQuery().next();*/
-        boolean isexists = customerDao.existsCustomer(id);
+        boolean isexists = customerDao.exist(id);
         if (isexists) {
         return true;
         }
@@ -247,7 +247,7 @@ public class ManageCustomersFormController {
             PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
             pstm.setString(1, id);
             pstm.executeUpdate();*/
-            boolean isDelete=customerDao.deleteCustomer(id);
+            boolean isDelete=customerDao.delete(id);
             if(isDelete) {
                 tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
                 tblCustomers.getSelectionModel().clearSelection();
@@ -272,7 +272,7 @@ public class ManageCustomersFormController {
             return "C00-001";
         }*/
         try{
-            ResultSet resultSet=customerDao.genarateCustomerId();
+            ResultSet resultSet=customerDao.genarateId();
             if (resultSet.next()) {
                 String id = resultSet.getString("id");
                 int newCustomerId = Integer.parseInt(id.replace("C00-", "")) + 1;
