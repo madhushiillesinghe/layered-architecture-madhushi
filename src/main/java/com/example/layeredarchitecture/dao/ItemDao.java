@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public interface ItemDao {
+
      boolean saveItem(ItemDTO dto) throws SQLException, ClassNotFoundException;
 
      boolean UpdateItem(ItemDTO dto) throws SQLException, ClassNotFoundException;

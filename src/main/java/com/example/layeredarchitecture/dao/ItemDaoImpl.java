@@ -56,9 +56,10 @@ public class ItemDaoImpl implements ItemDao{
     }
     @Override
     public ArrayList<ItemDTO> getAllItem()throws SQLException,ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
+      /*  Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT * FROM Item");
+        ResultSet rst = stm.executeQuery("SELECT * FROM Item");*/
+        ResultSet rst=SQLUtil.execute("SELECT * FROM Item");
         ArrayList<ItemDTO> allcustomer = new ArrayList<>();
 
         while (rst.next()) {
