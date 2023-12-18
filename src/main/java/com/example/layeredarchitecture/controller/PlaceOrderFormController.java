@@ -359,7 +359,7 @@ public class PlaceOrderFormController {
 
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) {
         /*Transaction*/
-       // Connection connection = null;
+        Connection connection = null;
         boolean isOrderSaved;
         boolean isOrderDetailSaved=false;
         boolean isUpdated=false;
@@ -370,9 +370,15 @@ public class PlaceOrderFormController {
             *//*if order id already exist*//*
             if (stm.executeQuery().next()) {}
 */
-           orderDao.selectOrderId(orderId);
+            connection=DBConnection.getDbConnection().getConnection();
+            orderDao.selectOrderId(orderId);
+           connection.setAutoCommit(false);
             isOrderSaved=orderDao.saveOrder(orderId,orderDate,customerId);
-
+            if(!(isOrderSaved)){
+                connection.rollback();
+                connection.setAutoCommit(true);
+                return false;
+            }
             /*connection.setAutoCommit(false);
             stm = connection.prepareStatement("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)");
             stm.setString(1, orderId);
@@ -389,6 +395,11 @@ public class PlaceOrderFormController {
 
             for (OrderDetailDTO detail : orderDetails) {
                 isOrderDetailSaved = orderDetailDao.saveOrderDetail(orderId, detail);
+                if(!(isOrderDetailSaved)){
+                    connection.rollback();;
+                    connection.setAutoCommit(true);
+                    return  false;
+                }
 //                //Search & Update Item
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
@@ -400,6 +411,11 @@ public class PlaceOrderFormController {
                 pstm.setString(4, item.getCode());*/
 
                 isUpdated = itemDao.UpdateItem(item);
+                if(!(isUpdated)){
+                    connection.rollback();;
+                    connection.setAutoCommit(true);
+                    return  false;
+                }
             }
 
                /* if (!(pstm.executeUpdate() > 0)) {
@@ -407,10 +423,10 @@ public class PlaceOrderFormController {
                     connection.setAutoCommit(true);
                     return false;
                 }*/
-            System.out.println(isOrderDetailSaved);
+            //System.out.println(isOrderDetailSaved);
         if(isOrderSaved && isOrderDetailSaved && isUpdated) {
-            DBConnection.getDbConnection().getConnection().commit();
-            DBConnection.getDbConnection().getConnection().setAutoCommit(true);
+            connection.commit();
+            connection.setAutoCommit(true);
             return true;
         }
         } catch (SQLException throwables) {
