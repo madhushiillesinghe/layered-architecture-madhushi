@@ -1,8 +1,11 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.custom.CustomerDao;
+import com.example.layeredarchitecture.dao.custom.QueryDao;
 import com.example.layeredarchitecture.dao.custom.impl.CustomerDaoImpl;
+import com.example.layeredarchitecture.dao.custom.impl.QueryDaoImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.model.CustomerOrderDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -39,9 +42,10 @@ public class ManageCustomersFormController {
     public JFXButton btnAddNewCustomer;
 
     CustomerDao customerDao=new CustomerDaoImpl();
+    QueryDao queryDao=new QueryDaoImpl();
 
 
-    public void initialize() {
+    public void initialize() throws SQLException, ClassNotFoundException {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
         tblCustomers.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
         tblCustomers.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -66,6 +70,7 @@ public class ManageCustomersFormController {
 
         txtCustomerAddress.setOnAction(event -> btnSave.fire());
         loadAllCustomers();
+//        getcustomerAndOrders();
     }
 
     private void loadAllCustomers() {
@@ -102,6 +107,7 @@ public class ManageCustomersFormController {
                                 dto.getName(),
                                 dto.getAddress()));
             }
+            getcustomerAndOrders();
           /*  while (rst.next()) {
                 tblCustomers.getItems().add(new CustomerTM(rst.getString("id"), rst.getString("name"), rst.getString("address")));
             }*/
@@ -301,5 +307,11 @@ public class ManageCustomersFormController {
         Collections.sort(tempCustomersList);
         return tempCustomersList.get(tempCustomersList.size() - 1).getId();
     }
-
+    public void getcustomerAndOrders() throws SQLException, ClassNotFoundException {
+            List<CustomerOrderDTO> cuslist = queryDao.customerOrderDetail();
+       // System.out.println(cuslist.indexOf(0));
+            for(CustomerOrderDTO dto:cuslist) {
+                System.out.println(dto);
+            }
+        }
 }

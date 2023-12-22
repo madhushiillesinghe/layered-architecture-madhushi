@@ -1,7 +1,10 @@
 package com.example.layeredarchitecture.dao.custom;
 
-import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.model.CustomerOrderDTO;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public interface QueryDao {
-    void customerOrderDetail(CustomerDTO dto);
+    List<CustomerOrderDTO>  customerOrderDetail() throws SQLException, ClassNotFoundException;
 }
