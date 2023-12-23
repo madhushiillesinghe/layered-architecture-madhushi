@@ -1,19 +1,10 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.custom.PlaceOrderBo;
-import com.example.layeredarchitecture.bo.custom.impl.PlaceOrderBoImpl;
-import com.example.layeredarchitecture.dao.custom.CustomerDao;
-import com.example.layeredarchitecture.dao.custom.ItemDao;
-import com.example.layeredarchitecture.dao.custom.OrderDao;
-import com.example.layeredarchitecture.dao.custom.OrderDetailDao;
-import com.example.layeredarchitecture.dao.custom.impl.CustomerDaoImpl;
-import com.example.layeredarchitecture.dao.custom.impl.ItemDaoImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDaoImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDetailDaoImpl;
-import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.dao.BOFactory;
+import com.example.layeredarchitecture.dto.CustomerDTO;
+import com.example.layeredarchitecture.dto.ItemDTO;
+import com.example.layeredarchitecture.dto.OrderDetailDTO;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -36,7 +27,6 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,7 +54,7 @@ public class PlaceOrderFormController {
     ItemDao itemDao=new ItemDaoImpl();
     OrderDao orderDao=new OrderDaoImpl();
     OrderDetailDao orderDetailDao=new OrderDetailDaoImpl();*/
-    PlaceOrderBo placeOrderBo=new PlaceOrderBoImpl();
+    PlaceOrderBo placeOrderBo= (PlaceOrderBo) BOFactory.getBoFactory().getBo(BOFactory.BOType.PLACEORDER);
 
 
     public void initialize() throws SQLException, ClassNotFoundException {

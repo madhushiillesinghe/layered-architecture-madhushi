@@ -1,13 +1,13 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.custom.CustomerBo;
-import com.example.layeredarchitecture.bo.custom.impl.CustomerBoImpl;
+import com.example.layeredarchitecture.dao.BOFactory;
+import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.CustomerDao;
 import com.example.layeredarchitecture.dao.custom.QueryDao;
-import com.example.layeredarchitecture.dao.custom.impl.CustomerDaoImpl;
-import com.example.layeredarchitecture.dao.custom.impl.QueryDaoImpl;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.CustomerOrderDTO;
+import com.example.layeredarchitecture.dto.CustomerDTO;
+import com.example.layeredarchitecture.dto.CustomerOrderDTO;
+import com.example.layeredarchitecture.entity.Customer;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -43,9 +43,9 @@ public class ManageCustomersFormController {
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
 
-    CustomerDao customerDao=new CustomerDaoImpl();
-    QueryDao queryDao=new QueryDaoImpl();
-    CustomerBo customerBo=new CustomerBoImpl();
+    CustomerDao customerDao= (CustomerDao) DAOFactory.getDADFactory().getDao(DAOFactory.DADType.CUSTOMER);
+    QueryDao queryDao= (QueryDao) DAOFactory.getDADFactory().getDao(DAOFactory.DADType.QUARY);
+    CustomerBo customerBo= (CustomerBo) BOFactory.getBoFactory().getBo(BOFactory.BOType.CUSTOM);
 
 
     public void initialize() throws SQLException, ClassNotFoundException {
@@ -101,14 +101,14 @@ public class ManageCustomersFormController {
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
 */
-            ArrayList<CustomerDTO> allCustomer = customerDao.getAll();
+            ArrayList<Customer> allCustomer = customerDao.getAll();
 
-            for (CustomerDTO dto:allCustomer) {
+            for (Customer entity:allCustomer) {
                 tblCustomers.getItems().add(
                         new CustomerTM(
-                                dto.getId(),
-                                dto.getName(),
-                                dto.getAddress()));
+                                entity.getId(),
+                                entity.getName(),
+                                entity.getAddress()));
             }
             getcustomerAndOrders();
           /*  while (rst.next()) {

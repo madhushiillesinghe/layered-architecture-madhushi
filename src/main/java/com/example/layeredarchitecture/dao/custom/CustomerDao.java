@@ -1,13 +1,10 @@
 package com.example.layeredarchitecture.dao.custom;
 
 import com.example.layeredarchitecture.dao.CRUDDao;
-import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.dto.CustomerDTO;
+import com.example.layeredarchitecture.entity.Customer;
 
-import java.sql.*;
-import java.util.ArrayList;
-
-public interface CustomerDao extends CRUDDao<CustomerDTO> {
+public interface CustomerDao extends CRUDDao<Customer> {
     /*ArrayList<CustomerDTO> getAllCustomer()throws SQLException,ClassNotFoundException ;
      boolean updateCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException ;
      boolean  existsCustomer(String id) throws SQLException, ClassNotFoundException;

@@ -1,6 +1,7 @@
 package com.example.layeredarchitecture.dao.custom.impl;
 import com.example.layeredarchitecture.dao.custom.CustomerDao;
-import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.dto.CustomerDTO;
+import com.example.layeredarchitecture.entity.Customer;
 import com.example.layeredarchitecture.utill.SQLUtil;
 
 import java.sql.*;
@@ -8,19 +9,19 @@ import java.util.ArrayList;
 public class CustomerDaoImpl  implements CustomerDao {
 
     @Override
-    public ArrayList<CustomerDTO> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Customer> getAll() throws SQLException, ClassNotFoundException {
         /*Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Customer");*/
         ResultSet rst=SQLUtil.execute("SELECT * FROM Customer");
-        ArrayList<CustomerDTO> allcustomer = new ArrayList<>();
+        ArrayList<Customer> allcustomer = new ArrayList<>();
 
         while (rst.next()) {
-            CustomerDTO customerDTO = new CustomerDTO(
+            Customer entity = new Customer(
                     rst.getString("id"),
                     rst.getString("name"),
                     rst.getString("address"));
-            allcustomer.add(customerDTO);/*Connection connection = DBConnection.getDbConnection().getConnection();
+            allcustomer.add(entity);/*Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Customer");*/
         }
@@ -28,14 +29,14 @@ public class CustomerDaoImpl  implements CustomerDao {
     }
 
     @Override
-    public boolean update(CustomerDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
        /* Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Customer SET name=?, address=? WHERE id=?");
         pstm.setString(1, dto.getName());
         pstm.setString(2, dto.getAddress());
         pstm.setString(3, dto.getId());
         return pstm.executeUpdate() > 0;*/
-        return SQLUtil.execute("UPDATE Customer SET name=?, address=? WHERE id=?", dto.getName(), dto.getAddress(), dto.getId());
+        return SQLUtil.execute("UPDATE Customer SET name=?, address=? WHERE id=?", customer.getName(),customer.getAddress(),customer.getId());
     }
 
     @Override
@@ -66,7 +67,7 @@ public class CustomerDaoImpl  implements CustomerDao {
     }
 
     @Override
-    public CustomerDTO search(String id) throws SQLException, ClassNotFoundException {
+    public Customer search(String id) throws SQLException, ClassNotFoundException {
        /* Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE id=?");
         pstm.setString(1, id + "");
@@ -79,7 +80,7 @@ public class CustomerDaoImpl  implements CustomerDao {
         );*/
         ResultSet rst= SQLUtil.execute("SELECT * FROM Customer WHERE id=?", id);
         rst.next();
-        return new CustomerDTO(
+        return new Customer(
                 rst.getString(1),
                 rst.getString(2),
                 rst.getString(3)
@@ -87,7 +88,7 @@ public class CustomerDaoImpl  implements CustomerDao {
     }
 
     @Override
-    public boolean save(CustomerDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Customer customer) throws SQLException, ClassNotFoundException {
       /*  Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO Customer (id,name, address) VALUES (?,?,?)");
         pstm.setString(1, dto.getId());
@@ -95,6 +96,6 @@ public class CustomerDaoImpl  implements CustomerDao {
         pstm.setString(3,dto.getAddress());
         return  pstm.executeUpdate()>0;*/
 
-        return SQLUtil.execute("INSERT INTO Customer (id,name, address) VALUES (?,?,?)", dto.getId(), dto.getName(), dto.getAddress());
+        return SQLUtil.execute("INSERT INTO Customer (id,name, address) VALUES (?,?,?)", customer.getId(),customer.getName(),customer.getAddress());
     }
 }

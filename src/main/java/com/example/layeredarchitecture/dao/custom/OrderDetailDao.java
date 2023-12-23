@@ -1,14 +1,11 @@
 package com.example.layeredarchitecture.dao.custom;
 
-import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.dao.SuperDao;
+import com.example.layeredarchitecture.dto.OrderDetailDTO;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-public interface OrderDetailDao {
+public interface OrderDetailDao extends SuperDao {
      boolean saveOrderDetail(String  orderId,OrderDetailDTO orderdeatail) throws SQLException, ClassNotFoundException;
 
 }

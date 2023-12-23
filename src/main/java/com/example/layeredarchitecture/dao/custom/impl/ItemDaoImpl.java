@@ -1,7 +1,8 @@
 package com.example.layeredarchitecture.dao.custom.impl;
 
 import com.example.layeredarchitecture.dao.custom.ItemDao;
-import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.dto.ItemDTO;
+import com.example.layeredarchitecture.entity.Item;
 import com.example.layeredarchitecture.utill.SQLUtil;
 
 import java.sql.*;
@@ -9,16 +10,16 @@ import java.util.ArrayList;
 
 public class ItemDaoImpl implements ItemDao {
     @Override
-    public boolean save(ItemDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Item item) throws SQLException, ClassNotFoundException {
         //Connection connection = DBConnection.getDbConnection().getConnection();
-      return  SQLUtil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",dto.getCode(),dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand());
+      return  SQLUtil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand());
         /*pstm.setString(1, dto.getCode());
         pstm.setString(2, dto.getDescription());
         pstm.setBigDecimal(3,dto.getUnitPrice());
         pstm.setInt(4,dto.getQtyOnHand());*/
     }
     @Override
-    public boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Item item) throws SQLException, ClassNotFoundException {
        /* Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
         pstm.setString(1, dto.getDescription());
@@ -26,7 +27,7 @@ public class ItemDaoImpl implements ItemDao {
         pstm.setInt(3, dto.getQtyOnHand());
         pstm.setString(4, dto.getCode());
         return pstm.executeUpdate()>0;*/
-        return  SQLUtil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand(),dto.getCode());
+        return  SQLUtil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",item.getDescription(),item.getUnitPrice(),item.getQtyOnHand(),item.getCode());
     }
     @Override
     public boolean exist(String  id) throws SQLException, ClassNotFoundException {
@@ -53,26 +54,26 @@ public class ItemDaoImpl implements ItemDao {
         return SQLUtil.execute("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
     }
     @Override
-    public ArrayList<ItemDTO> getAll()throws SQLException,ClassNotFoundException {
+    public ArrayList<Item> getAll()throws SQLException,ClassNotFoundException {
       /*  Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Item");*/
         ResultSet rst=SQLUtil.execute("SELECT * FROM Item");
-        ArrayList<ItemDTO> allcustomer = new ArrayList<>();
+        ArrayList<Item> allcustomer = new ArrayList<>();
 
         while (rst.next()) {
-            ItemDTO itemDTO = new ItemDTO(
+            Item item = new Item(
                     rst.getString("code"),
                     rst.getString("description"),
                     rst.getBigDecimal("unitPrice"),
                     rst.getInt("qtyOnHand"));
-                    allcustomer.add(itemDTO);
+                    allcustomer.add(item);
         }
         return allcustomer;
         //return  SQLUtil.execute("SELECT * FROM Item");
     }
     @Override
-   public ItemDTO search(String newItemCode) throws SQLException, ClassNotFoundException {
+   public Item search(String newItemCode) throws SQLException, ClassNotFoundException {
         /*Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
         pstm.setString(1, newItemCode + "");
@@ -86,7 +87,7 @@ public class ItemDaoImpl implements ItemDao {
         );*/
     ResultSet rst= SQLUtil.execute("SELECT * FROM Item WHERE code=?",newItemCode);
         rst.next();
-        return new ItemDTO (
+        return new Item (
                 rst.getString(1),
                 rst.getString(2),
                 rst.getBigDecimal(3),

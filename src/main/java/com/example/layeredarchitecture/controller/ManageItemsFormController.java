@@ -1,8 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.custom.ItemBo;
-import com.example.layeredarchitecture.bo.custom.impl.ItemBoImpl;
-import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.dao.BOFactory;
+import com.example.layeredarchitecture.dto.ItemDTO;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -38,7 +38,7 @@ public class ManageItemsFormController  {
     public JFXButton btnAddNewItem;
 
    // ItemDao itemDao=new ItemDaoImpl();
-    ItemBo itemBo=new ItemBoImpl();
+    ItemBo itemBo= (ItemBo) BOFactory.getBoFactory().getBo(BOFactory.BOType.ITEM);
 
 
     public void initialize() throws SQLException, ClassNotFoundException {

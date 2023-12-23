@@ -1,7 +1,6 @@
-package com.example.layeredarchitecture.model;
+package com.example.layeredarchitecture.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class CustomerOrderDTO implements Serializable {
