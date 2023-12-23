@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface PlaceOrderBo extends SuperDao {
+public interface PlaceOrderBo extends SuperBo {
     boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
 
     CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException;

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface ItemBo extends SuperDao {
+public interface ItemBo extends SuperBo {
     boolean saveItem(ItemDTO dto) throws SQLException, ClassNotFoundException;
 
     boolean UpdateItem(ItemDTO dto) throws SQLException, ClassNotFoundException;

@@ -6,7 +6,7 @@ import com.example.layeredarchitecture.dto.CustomerDTO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public interface CustomerBo extends SuperDao {
+public interface CustomerBo extends SuperBo {
     boolean saveCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException;
     boolean updateCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException ;
     boolean  existCustomer(String id) throws SQLException, ClassNotFoundException;
