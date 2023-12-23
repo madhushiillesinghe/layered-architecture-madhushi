@@ -27,24 +27,23 @@ public class PlaceOrderBoImpl implements PlaceOrderBo {
     ItemDao itemDao=new ItemDaoImpl();
     OrderDao orderDao=new OrderDaoImpl();
     OrderDetailDao orderDetailDao=new OrderDetailDaoImpl();
-    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) {
+    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         /*Transaction*/
         Connection connection = null;
         boolean isOrderSaved;
         boolean isOrderDetailSaved=false;
         boolean isUpdated=false;
-        try {
             /*connection = DBConnection.getDbConnection().getConnection();
             PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
             stm.setString(1, orderId);
             *//*if order id already exist*//*
             if (stm.executeQuery().next()) {}
 */
-            connection= DBConnection.getDbConnection().getConnection();
+            connection = DBConnection.getDbConnection().getConnection();
             orderDao.selectOrderId(orderId);
             connection.setAutoCommit(false);
-            isOrderSaved=orderDao.saveOrder(orderId,orderDate,customerId);
-            if(!(isOrderSaved)){
+            isOrderSaved = orderDao.saveOrder(orderId, orderDate, customerId);
+            if (!(isOrderSaved)) {
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
@@ -65,10 +64,11 @@ public class PlaceOrderBoImpl implements PlaceOrderBo {
 
             for (OrderDetailDTO detail : orderDetails) {
                 isOrderDetailSaved = orderDetailDao.saveOrderDetail(orderId, detail);
-                if(!(isOrderDetailSaved)){
-                    connection.rollback();;
+                if (!(isOrderDetailSaved)) {
+                    connection.rollback();
+                    ;
                     connection.setAutoCommit(true);
-                    return  false;
+                    return false;
                 }
 //                //Search & Update Item
                 ItemDTO item = findItem(detail.getItemCode());
@@ -81,10 +81,11 @@ public class PlaceOrderBoImpl implements PlaceOrderBo {
                 pstm.setString(4, item.getCode());*/
 
                 isUpdated = itemDao.update(item);
-                if(!(isUpdated)){
-                    connection.rollback();;
+                if (!(isUpdated)) {
+                    connection.rollback();
+                    ;
                     connection.setAutoCommit(true);
-                    return  false;
+                    return false;
                 }
             }
 
@@ -94,28 +95,16 @@ public class PlaceOrderBoImpl implements PlaceOrderBo {
                     return false;
                 }*/
             //System.out.println(isOrderDetailSaved);
-            if(isOrderSaved && isOrderDetailSaved && isUpdated) {
+            if (isOrderSaved && isOrderDetailSaved && isUpdated) {
                 connection.commit();
                 connection.setAutoCommit(true);
                 return true;
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
+            return false;
     }
-    public ItemDTO findItem(String code) {
-        try {
+    public ItemDTO findItem(String code) throws SQLException, ClassNotFoundException {
             ItemDTO dto=itemDao.search(code);
             return new ItemDTO(code, dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand());
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to find the Item " + code, e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
     @Override
     public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
