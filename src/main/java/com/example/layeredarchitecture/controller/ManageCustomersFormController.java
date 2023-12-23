@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.bo.custom.CustomerBo;
+import com.example.layeredarchitecture.bo.custom.impl.CustomerBoImpl;
 import com.example.layeredarchitecture.dao.custom.CustomerDao;
 import com.example.layeredarchitecture.dao.custom.QueryDao;
 import com.example.layeredarchitecture.dao.custom.impl.CustomerDaoImpl;
@@ -43,6 +45,7 @@ public class ManageCustomersFormController {
 
     CustomerDao customerDao=new CustomerDaoImpl();
     QueryDao queryDao=new QueryDaoImpl();
+    CustomerBo customerBo=new CustomerBoImpl();
 
 
     public void initialize() throws SQLException, ClassNotFoundException {
@@ -185,7 +188,7 @@ public class ManageCustomersFormController {
                 pstm.setString(2, name);
                 pstm.setString(3, address);
                 pstm.executeUpdate();*/
-                boolean isSaved = customerDao.save(new CustomerDTO(id, name, address));
+                boolean isSaved = customerBo.saveCustomer(new CustomerDTO(id, name, address));
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
                 }
@@ -209,7 +212,7 @@ public class ManageCustomersFormController {
                 pstm.setString(2, address);
                 pstm.setString(3, id);
                 pstm.executeUpdate();*/
-                boolean isUpdate=customerDao.update(new CustomerDTO(id,name,address));
+                boolean isUpdate=customerBo.updateCustomer(new CustomerDTO(id,name,address));
                 if(isUpdate){tblCustomers.getItems().add(new CustomerTM(id,name,address));
                 }
             } catch (SQLException e) {
@@ -233,7 +236,7 @@ public class ManageCustomersFormController {
         PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
         pstm.setString(1, id);
         return pstm.executeQuery().next();*/
-        boolean isexists = customerDao.exist(id);
+        boolean isexists = customerBo.existCustomer(id);
         if (isexists) {
         return true;
         }
@@ -252,7 +255,7 @@ public class ManageCustomersFormController {
             PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
             pstm.setString(1, id);
             pstm.executeUpdate();*/
-            boolean isDelete=customerDao.delete(id);
+            boolean isDelete=customerBo.deleteCustomer(id);
             if(isDelete) {
                 tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
                 tblCustomers.getSelectionModel().clearSelection();
@@ -277,7 +280,7 @@ public class ManageCustomersFormController {
             return "C00-001";
         }*/
         try{
-            ResultSet resultSet=customerDao.genarateId();
+            ResultSet resultSet=customerBo.genarateCustomerId();
             if (resultSet.next()) {
                 String id = resultSet.getString("id");
                 int newCustomerId = Integer.parseInt(id.replace("C00-", "")) + 1;
@@ -309,7 +312,6 @@ public class ManageCustomersFormController {
     }
     public void getcustomerAndOrders() throws SQLException, ClassNotFoundException {
             List<CustomerOrderDTO> cuslist = queryDao.customerOrderDetail();
-       // System.out.println(cuslist.indexOf(0));
             for(CustomerOrderDTO dto:cuslist) {
                 System.out.println(dto);
             }
